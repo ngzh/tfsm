@@ -8,15 +8,21 @@ interface StateMachineConfig {
 }
 
 class StateMachine {
-    inital: string;
-    state: string;
-    stateMap: { [from: string]: { [event: string]: string } };
+    private inital: string;
+    private state: string;
+    private stateMap: { [from: string]: { [event: string]: string } } = {};
+    private eventCb: {
+        before: { [event: string]: Function },
+        after: { [event: string]: Function }
+    } = { before: {}, after: {} };
+    private stateCb: {
+        enter: { [event: string]: Function },
+        leave: { [event: string]: Function }
+    } = { enter: {}, leave: {} };
 
     constructor(cfg: StateMachineConfig) {
         this.inital = cfg.initial || 'none';
         this.state = cfg.initial;
-
-        this.stateMap = {};
 
         for (let i = 0; i < cfg.events.length; i += 1) {
             // to statisfy type infer, actualy this should be string[]
@@ -32,8 +38,24 @@ class StateMachine {
         }
     }
 
-    input(event: string) {
-        this.state = this.stateMap[this.state][event];
+    input(event: string): string {
+        let func: Function;
+        if (func = this.eventCb.before[event]) { func(); }
+
+        if (this.stateMap[this.state] === undefined) {
+            this.error(this.state, event);
+            return 'failed';
+        }
+
+        let prevState = this.state;
+
+        this.state = this.stateMap[prevState][event];
+
+        if (func = this.stateCb.enter[this.state]) { func(); }
+        if (func = this.stateCb.leave[prevState]) { func(); }
+        if (func = this.eventCb.after[event]) { func(); }
+
+        return 'success';
     }
 
     current(): string {
@@ -44,19 +66,15 @@ class StateMachine {
         this.state = this.inital;
     }
 
-    onBefore(event: string) {
+    onBefore(event: string, cb: Function) { this.eventCb.before[event] = cb; }
 
-    }
+    onAfter(event: string, cb: Function) { this.eventCb.after[event] = cb; }
 
-    onAfter(event: string) {
+    onEnter(state: string, cb: Function) { this.stateCb.enter[state] = cb; }
 
-    }
+    onLeave(state: string, cb: Function) { this.stateCb.leave[state] = cb; }
 
-    onEnter(state: string) {
-
-    }
-
-    onLeave(state: string) {
+    error(from: string, event: string, to?: string) {
 
     }
 }

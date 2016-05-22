@@ -1,6 +1,6 @@
 import { StateMachine } from './state-machine';
 
-let sm = new StateMachine({
+let fsm = new StateMachine({
     initial: "off",
     events: [
         { name: "toggle", from: "on", to: "off" },
@@ -9,20 +9,22 @@ let sm = new StateMachine({
     ]
 });
 
-sm.input("toggle");
-console.log(sm.current());
-sm.input("toggle");
-console.log(sm.current());
-sm.input("toggle");
-console.log(sm.current());
-sm.input("kick");
-console.log(sm.current());
+fsm.onAfter("kick", () => { console.log("oh no"); });
 
-sm.reset();
-console.log(sm.current());
-sm.input("toggle");
-console.log(sm.current());
-sm.input("toggle");
-console.log(sm.current());
-sm.input("kick");
-console.log(sm.current());
+fsm.input("toggle");
+console.log(fsm.current());
+fsm.input("toggle");
+console.log(fsm.current());
+fsm.input("toggle");
+console.log(fsm.current());
+fsm.input("kick");
+console.log(fsm.current());
+
+fsm.reset();
+console.log(fsm.current());
+fsm.input("toggle");
+console.log(fsm.current());
+fsm.input("toggle");
+console.log(fsm.current());
+fsm.input("kick");
+console.log(fsm.current());
