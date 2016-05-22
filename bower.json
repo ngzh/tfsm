@@ -1,0 +1,15 @@
+{
+  "name": "easyfsm",
+  "description": "an easy to use finite state machine",
+  "main": "index.js",
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
