@@ -4,23 +4,34 @@ interface StateMachineConfig {
         name: string,
         from: string | string[],
         to: string
-    }]
+    }],
+    debug?: boolean;
 }
 
 class StateMachine {
     private inital: string;
+
     private state: string;
+
+    private asyncing: boolean;
+
     private stateMap: { [from: string]: { [event: string]: string } } = {};
+
     private eventCb: {
         before: { [event: string]: Function },
         after: { [event: string]: Function }
     } = { before: {}, after: {} };
+
     private stateCb: {
         enter: { [event: string]: Function },
         leave: { [event: string]: Function }
     } = { enter: {}, leave: {} };
 
+    private errorCb: Function;
+    private debug: boolean;
+
     constructor(cfg: StateMachineConfig) {
+        this.debug = cfg.debug || false;
         this.inital = cfg.initial || 'none';
         this.state = cfg.initial;
 
@@ -40,11 +51,13 @@ class StateMachine {
 
     input(event: string): string {
         let func: Function;
+        if (this.debug) { console.log('Event: ', event, 'Before: ', this.state); }
+
         if (func = this.eventCb.before[event]) { func(); }
 
-        if (this.stateMap[this.state] === undefined) {
+        if (this.stateMap[this.state][event] === undefined) {
             this.error(this.state, event);
-            return 'failed';
+            return "failed";
         }
 
         let prevState = this.state;
@@ -55,7 +68,8 @@ class StateMachine {
         if (func = this.stateCb.leave[prevState]) { func(); }
         if (func = this.eventCb.after[event]) { func(); }
 
-        return 'success';
+        if (this.debug) { console.log('Event: ', event, 'After: ', this.state); }
+        return "success";
     }
 
     current(): string {
@@ -74,8 +88,12 @@ class StateMachine {
 
     onLeave(state: string, cb: Function) { this.stateCb.leave[state] = cb; }
 
-    error(from: string, event: string, to?: string) {
+    onError(cb: Function) { this.errorCb = cb; }
 
+    error(from: string, event: string, to?: string) {
+        let func: Function;
+        if (func = this.errorCb) { func(from, event); }
+        console.log("error when transition from ", from, " ", event);
     }
 }
 
