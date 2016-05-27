@@ -72,6 +72,10 @@ class StateMachine {
         return "success";
     }
 
+    is(state: string): boolean {
+        return state == this.state;
+    }
+
     current(): string {
         return this.state;
     }

@@ -14,20 +14,20 @@ import { StateMachine } from './state-machine';
     fsm.onAfter("kick", () => { kicked = true; });
 
     fsm.input("toggle");
-    console.assert(fsm.current() === "on");
+    console.assert(fsm.is("on"));
     fsm.input("toggle");
-    console.assert(fsm.current() === "off");
+    console.assert(fsm.is("off"));
     fsm.input("toggle");
-    console.assert(fsm.current() === "on");
+    console.assert(fsm.is("on"));
     fsm.input("kick");
     console.assert(kicked === true);
     kicked = false;
 
     fsm.reset()
     fsm.input("toggle");
-    console.assert(fsm.current() === "on");
+    console.assert(fsm.is("on"));
     fsm.input("toggle");
-    console.assert(fsm.current() === "off");
+    console.assert(fsm.is("off"));
     fsm.input("kick");
     console.assert(kicked === true);
 })();
