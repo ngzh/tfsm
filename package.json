@@ -1,9 +1,9 @@
 {
   "name": "tfsm",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "typed finite state machine for typescript",
   "scripts": {
-    "test": "./run-tests"
+    "test": "./run-tests.sh"
   },
   "author": "zhfuzzy",
   "license": "BSD"
