@@ -1,6 +1,5 @@
 import { StateMachine } from '../src/state-machine';
 
-
 enum States {
     ON,
     OFF,

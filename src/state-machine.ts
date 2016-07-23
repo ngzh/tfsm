@@ -15,7 +15,9 @@ class StateMachine<StateEnum, EventEnum> {
 
     private asyncing: boolean;
 
-    private stateMap: { [from: string]: { [event: string]: StateEnum } } = {};
+    private eventMap: { [from: string]: { [event: string]: StateEnum } } = {};
+
+    private stateMap: { [from: string]: [string] } = {};
 
     private eventCb: {
         before: { [event: string]: Function },
@@ -41,32 +43,48 @@ class StateMachine<StateEnum, EventEnum> {
                 cfg.events[i].from : [cfg.events[i].from];
 
             for (let j = 0; j < froms.length; j += 1) {
-                this.stateMap['' + froms[j]] = this.stateMap['' + froms[j]] || {};
-                this.stateMap['' + froms[j]]['' + cfg.events[i].name] = cfg.events[i].to;
+                this.eventMap['' + froms[j]] = this.eventMap['' + froms[j]] || {};
+                this.eventMap['' + froms[j]]['' + cfg.events[i].name] = cfg.events[i].to;
             }
         }
     }
 
-    input(event: EventEnum): string {
+    input(event: EventEnum): boolean {
         let func: Function;
         if (this.debug) { console.log('Event: ', event, 'Before: ', this.state); }
 
         if (func = this.eventCb.before['' + event]) { func(); }
-        if (this.stateMap['' + this.state]['' + event] === undefined) {
+        if (this.eventMap['' + this.state]['' + event] === undefined) {
             this.error(this.state, event);
-            return "failed";
+            return false;
         }
 
         let prevState = this.state;
 
-        this.state = this.stateMap['' + prevState]['' + event];
+        this.state = this.eventMap['' + prevState]['' + event];
 
         if (func = this.stateCb.enter['' + this.state]) { func(); }
         if (func = this.stateCb.leave['' + prevState]) { func(); }
         if (func = this.eventCb.after['' + event]) { func(); }
 
         if (this.debug) { console.log('Event: ', event, 'After: ', this.state); }
-        return "success";
+        return true;
+    }
+
+    // TODO
+    canInput(event: EventEnum): boolean {
+        return true;
+    }
+
+    // TODO
+    go(state: StateEnum): boolean {
+        let func: Function;
+        return true;
+    }
+
+    // TODO
+    canGo(state: StateEnum): boolean {
+        return true;
     }
 
     is(state: StateEnum) { return state == this.state; }
