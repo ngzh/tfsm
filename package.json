@@ -1,11 +1,10 @@
 {
-  "name": "easyfsm",
-  "version": "0.0.1",
-  "description": "an easy to use finite state machine",
-  "main": "index.js",
+  "name": "tfsm",
+  "version": "0.1",
+  "description": "typed finite state machine for typescript",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./run-tests"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "zhfuzzy",
+  "license": "BSD"
 }
