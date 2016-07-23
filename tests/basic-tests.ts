@@ -1,4 +1,4 @@
-import { StateMachine } from './state-machine';
+import { StateMachine } from '../src/state-machine';
 
 
 enum States {
@@ -42,4 +42,4 @@ console.assert(fsm.is(States.OFF));
 fsm.input(Events.KICK);
 console.assert(kicked === true);
 
-console.log("all tests passed")
+console.log("basic tests passed")
