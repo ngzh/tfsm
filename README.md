@@ -1,6 +1,8 @@
 # TFSM
 typed finite state machine for typescript
 
+[![Build Status](https://travis-ci.org/zhfuzzy/tfsm.svg?branch=master)](https://travis-ci.org/zhfuzzy/tfsm)
+
 ## install
 
 TODO
