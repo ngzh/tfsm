@@ -1,21 +1,21 @@
-interface StateMachineConfig {
-    initial?: string,
+interface StateMachineConfig<StateEnum, EventEnum> {
+    initial?: StateEnum,
     events: [{
-        name: string,
-        from: string | string[],
-        to: string
+        name: EventEnum,
+        from: StateEnum | StateEnum[],
+        to: StateEnum
     }],
     debug?: boolean;
 }
 
-class StateMachine {
-    private inital: string;
+class StateMachine<StateEnum, EventEnum> {
+    private inital: StateEnum;
 
-    private state: string;
+    private state: StateEnum;
 
     private asyncing: boolean;
 
-    private stateMap: { [from: string]: { [event: string]: string } } = {};
+    private stateMap: { [from: string]: { [event: string]: StateEnum } } = {};
 
     private eventCb: {
         before: { [event: string]: Function },
@@ -30,71 +30,62 @@ class StateMachine {
     private errorCb: Function;
     private debug: boolean;
 
-    constructor(cfg: StateMachineConfig) {
+    constructor(cfg: StateMachineConfig<StateEnum, EventEnum>) {
         this.debug = cfg.debug || false;
-        this.inital = cfg.initial || 'none';
+        this.inital = cfg.initial;
         this.state = cfg.initial;
 
         for (let i = 0; i < cfg.events.length; i += 1) {
-            // to statisfy type infer, actualy this should be string[]
+            // to statisfy type infer, actualy this should be StateEnum[]
             let froms: any = (cfg.events[i].from instanceof Array) ?
                 cfg.events[i].from : [cfg.events[i].from];
 
             for (let j = 0; j < froms.length; j += 1) {
-                this.stateMap[froms[j]] = this.stateMap[froms[j]] || {};
-
-                this.stateMap[froms[j]][cfg.events[i].name] =
-                    cfg.events[i].to;
+                this.stateMap['' + froms[j]] = this.stateMap['' + froms[j]] || {};
+                this.stateMap['' + froms[j]]['' + cfg.events[i].name] = cfg.events[i].to;
             }
         }
     }
 
-    input(event: string): string {
+    input(event: EventEnum): string {
         let func: Function;
         if (this.debug) { console.log('Event: ', event, 'Before: ', this.state); }
 
-        if (func = this.eventCb.before[event]) { func(); }
-
-        if (this.stateMap[this.state][event] === undefined) {
+        if (func = this.eventCb.before['' + event]) { func(); }
+        if (this.stateMap['' + this.state]['' + event] === undefined) {
             this.error(this.state, event);
             return "failed";
         }
 
         let prevState = this.state;
 
-        this.state = this.stateMap[prevState][event];
+        this.state = this.stateMap['' + prevState]['' + event];
 
-        if (func = this.stateCb.enter[this.state]) { func(); }
-        if (func = this.stateCb.leave[prevState]) { func(); }
-        if (func = this.eventCb.after[event]) { func(); }
+        if (func = this.stateCb.enter['' + this.state]) { func(); }
+        if (func = this.stateCb.leave['' + prevState]) { func(); }
+        if (func = this.eventCb.after['' + event]) { func(); }
 
         if (this.debug) { console.log('Event: ', event, 'After: ', this.state); }
         return "success";
     }
 
-    is(state: string): boolean {
-        return state == this.state;
-    }
+    is(state: StateEnum) { return state == this.state; }
 
-    current(): string {
-        return this.state;
-    }
+    current() { return this.state; }
 
-    reset() {
-        this.state = this.inital;
-    }
+    reset() { this.state = this.inital; }
 
-    onBefore(event: string, cb: Function) { this.eventCb.before[event] = cb; }
+    onBefore(event: EventEnum, cb: Function) { this.eventCb.before['' + event] = cb; }
 
-    onAfter(event: string, cb: Function) { this.eventCb.after[event] = cb; }
+    onAfter(event: EventEnum, cb: Function) { this.eventCb.after['' + event] = cb; }
 
-    onEnter(state: string, cb: Function) { this.stateCb.enter[state] = cb; }
+    onEnter(state: EventEnum, cb: Function) { this.stateCb.enter['' + state] = cb; }
 
-    onLeave(state: string, cb: Function) { this.stateCb.leave[state] = cb; }
+    onLeave(state: EventEnum, cb: Function) { this.stateCb.leave['' + state] = cb; }
 
     onError(cb: Function) { this.errorCb = cb; }
 
-    error(from: string, event: string, to?: string) {
+    error(from: StateEnum, event: EventEnum, to?: StateEnum) {
         let func: Function;
         if (func = this.errorCb) { func(from, event); }
         console.log("error when transition from ", from, " ", event);
