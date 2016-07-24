@@ -1,18 +1,21 @@
 # TFSM
 [![Build Status](https://travis-ci.org/zhfuzzy/tfsm.svg?branch=master)](https://travis-ci.org/zhfuzzy/tfsm)
+[![NPM](https://nodei.co/npm/tfsm.png?mini=true)](https://npmjs.org/package/tfsm)
 
 typed finite state machine for typescript
 
 ## install
 
-TODO
+```bash
+$ npm install tfsm --save
+```
 
 ## usage
 
 setup a state machine
 
 ```typescript
-import { StateMachine } from '../src/state-machine';
+import { StateMachine } from 'tfsm';
 
 enum States {
     ON,
