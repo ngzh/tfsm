@@ -1,4 +1,4 @@
-import { StateMachine } from '../src/state-machine';
+import { StateMachine } from '../lib/state-machine';
 
 enum States {
     ON,

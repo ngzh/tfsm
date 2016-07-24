@@ -2,9 +2,23 @@
   "name": "tfsm",
   "version": "0.1.0",
   "description": "typed finite state machine for typescript",
+  "main": "./out",
+  "typings": "./out/index",
   "scripts": {
+    "install": "tsc",
     "test": "./run-tests.sh"
   },
-  "author": "zhfuzzy",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zhfuzzy/tfsm.git"
+  },
+  "keywords": [
+    "state machine",
+    "finite state machine",
+    "typescript",
+    "type",
+    "typed"
+  ],
+  "author": "zhfuzzy <zhfuzzy@gmail.com>",
   "license": "BSD"
 }

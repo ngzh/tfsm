@@ -3,5 +3,5 @@
 # compile all sources
 tsc;
 # do test
-node out/tests/basic-tests.js
+node out/test/basic-tests.js
 

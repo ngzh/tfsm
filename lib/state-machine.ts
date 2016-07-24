@@ -1,4 +1,4 @@
-interface StateMachineConfig<StateEnum, EventEnum> {
+export interface StateMachineConfig<StateEnum, EventEnum> {
     initial?: StateEnum,
     events: [{
         name: EventEnum,
@@ -8,7 +8,7 @@ interface StateMachineConfig<StateEnum, EventEnum> {
     debug?: boolean;
 }
 
-class StateMachine<StateEnum, EventEnum> {
+export class StateMachine<StateEnum, EventEnum> {
     private inital: StateEnum;
 
     private state: StateEnum;
@@ -109,5 +109,3 @@ class StateMachine<StateEnum, EventEnum> {
         console.log("error when transition from ", from, " ", event);
     }
 }
-
-export { StateMachine };
