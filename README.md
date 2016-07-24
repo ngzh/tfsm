@@ -1,18 +1,14 @@
-# TFSM
-[![Build Status](https://travis-ci.org/zhfuzzy/tfsm.svg?branch=master)](https://travis-ci.org/zhfuzzy/tfsm)
-[![NPM](https://nodei.co/npm/tfsm.png?mini=true)](https://npmjs.org/package/tfsm)
+# tfsm [![Build Status](https://travis-ci.org/zhfuzzy/tfsm.svg?branch=master)](https://travis-ci.org/zhfuzzy/tfsm) [![npm version](https://badge.fury.io/js/tfsm.svg)](https://badge.fury.io/js/tfsm)
 
-typed finite state machine for typescript
+Typed finite state machine for typescript. This is intended to be used with typescript, compared with [original javascript version](https://github.com/jakesgordon/javascript-state-machine).
 
-## install
+## Usage
 
 ```bash
 $ npm install tfsm --save
 ```
 
-## usage
-
-setup a state machine
+Setup a state machine
 
 ```typescript
 import { StateMachine } from 'tfsm';
@@ -60,13 +56,13 @@ see files in `tests/`
 ```bash
 # build
 $ tsc
-# run tests
+# build & run tests
 $ ./run-tests.sh
 ```
 
 ## Roadmap
 
-* Event-less style state machine(use `statemachine.go(state)` to direct transfer from state to state)
-* Queries like `canGo` and `canInput`
-* Async transaction
-* Automatically export state transfer map
+* [ ] Event-less style state machine(use `statemachine.go(state)` to direct transfer from state to state)
+* [ ] Queries like `canGo` and `canInput`
+* [ ] Async transaction
+* [ ] Automatically export state transfer map
