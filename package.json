@@ -5,7 +5,7 @@
   "main": "./out",
   "typings": "./out/index",
   "scripts": {
-    "install": "tsc",
+    "postinstall": "tsc",
     "test": "./run-tests.sh"
   },
   "repository": {

@@ -5,7 +5,7 @@ export interface StateMachineConfig<StateEnum, EventEnum> {
         from: StateEnum | StateEnum[],
         to: StateEnum
     }],
-    debug?: boolean;
+    debug?: boolean
 }
 
 export class StateMachine<StateEnum, EventEnum> {
